@@ -22,9 +22,6 @@ class ProductController extends AbstractController
 		$products = $this->productManager->filterBy(null, $category);
 		$categories = $this->categoryManager->findAll();
 
-		var_dump($products);
-		var_dump($categories);
-
 		return $this->render('shop/product/index.html.twig', [
 			'products' => $products,
 			'categories' => $categories,
