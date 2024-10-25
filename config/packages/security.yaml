@@ -1,47 +1,46 @@
 security:
-    password_hashers:
-        Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
-    providers:
-        users_in_memory: { memory: null }
-        app_user_provider:
-            entity:
-                class: App\Entity\User
-                property: email
-    firewalls:
-        dev:
-            pattern: ^/(_(profiler|wdt)|css|images|js)/
-            security: false
-        main:
-            lazy: true
-            provider: app_user_provider
-            custom_authenticator: App\Security\LoginFormAuthenticator
-            logout:
-                path: app_logout
-                target: app_home
+  password_hashers:
+    Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: "auto"
 
-            remember_me:
-                secret: '%kernel.secret%'
-                lifetime: 604800 # 1 week in seconds
-                path: /
+  providers:
+    users_in_memory: { memory: null }
+    app_user_provider:
+      entity:
+        class: App\Entity\User
+        property: email
 
-access_control:
+  firewalls:
+    dev:
+      pattern: ^/(_(profiler|wdt)|css|images|js)/
+      security: false
+    main:
+      lazy: true
+      provider: app_user_provider
+      custom_authenticator: App\Security\LoginFormAuthenticator
+      logout:
+        path: app_logout
+        target: app_home
+      remember_me:
+        secret: "%kernel.secret%"
+        lifetime: 604800 # 1 week in seconds
+        path: /
+
+  access_control:
     # Autorise uniquement les utilisateurs avec le rôle ROLE_ADMIN à accéder aux routes de l'administration
     - { path: ^/admin, roles: ROLE_ADMIN }
-    
+
     # Autorise uniquement les utilisateurs avec le rôle ROLE_USER à accéder aux routes de profil utilisateur
     - { path: ^/profile, roles: ROLE_USER }
-    
-    # Par défaut, toutes les autres routes sont accessibles sans restriction
-    - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
-    role_hierarchy:
-        ROLE_ADMIN: ROLE_USER
+  role_hierarchy:
+    ROLE_ADMIN: [ROLE_ADMIN, ROLE_USER]
+    ROLE_USER: ROLE_USER
 
 when@test:
-    security:
-        password_hashers:
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
+  security:
+    password_hashers:
+      Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
+        algorithm: auto
+        cost: 4 # Valeur minimale pour bcrypt
+        time_cost: 3 # Valeur minimale pour argon
+        memory_cost: 10 # Valeur minimale pour argon
