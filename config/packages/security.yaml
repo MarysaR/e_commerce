@@ -24,7 +24,15 @@ security:
                 lifetime: 604800 # 1 week in seconds
                 path: /
 
-    access_control:
+access_control:
+    # Autorise uniquement les utilisateurs avec le rôle ROLE_ADMIN à accéder aux routes de l'administration
+    - { path: ^/admin, roles: ROLE_ADMIN }
+    
+    # Autorise uniquement les utilisateurs avec le rôle ROLE_USER à accéder aux routes de profil utilisateur
+    - { path: ^/profile, roles: ROLE_USER }
+    
+    # Par défaut, toutes les autres routes sont accessibles sans restriction
+    - { path: ^/, roles: IS_AUTHENTICATED_ANONYMOUSLY }
 
     role_hierarchy:
         ROLE_ADMIN: ROLE_USER

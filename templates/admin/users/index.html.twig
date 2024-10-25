@@ -10,9 +10,12 @@
 
         {% block table_actions %}
             <div class="flex justify-end gap-2 items-center">
-                {% include 'components/search_form.html.twig' with {
-                    placeholder: 'Rechercher un ticket...',
+             <form action="{{ path('app_admin_user_index') }}" method="get">
+                {% include 'components/search_field.html.twig' with {
+                    placeholder: 'Rechercher un utilisateur...',
+                    value: search
                 } %}
+             </form>
                 <a href="{{ path('app_admin_user_new') }}"
                    class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded inline-flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"

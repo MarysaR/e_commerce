@@ -20,10 +20,15 @@ class CategoryController extends AbstractController
     public function __construct(private CategoryManager $categoryManager) {}
 
     #[Route('', name: 'app_admin_category_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = $request->query->get('q', null);
+
+        $categories = $this->categoryManager->findAll($search);
+
         return $this->render('admin/categories/index.html.twig', [
-            'categories' => $this->categoryManager->findAll(),
+            'categories' => $categories,
+            'search' => $search,
         ]);
     }
 

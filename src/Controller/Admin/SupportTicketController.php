@@ -16,10 +16,15 @@ class SupportTicketController extends AbstractController
     public function __construct(private readonly TicketManager $supportTiketManager) {}
 
     #[Route('', name: 'app_admin_support_ticket_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+        $search = $request->query->get('q', null);
+
+        $supportTicket = $this->supportTiketManager->findAll($search);
+
         return $this->render('admin/support_tickets/index.html.twig', [
-            'support_tickets' => $this->supportTiketManager->findAll(),
+            'support_tickets' => $supportTicket,
+            'search' => $search,
         ]);
     }
 
@@ -53,7 +58,7 @@ class SupportTicketController extends AbstractController
     #[Route('/{id}', name: 'app_admin_support_ticket_delete', methods: ['POST'])]
     public function delete(Request $request, SupportTicket $supportTicket): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$supportTicket->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $supportTicket->getId(), $request->request->get('_token'))) {
             $this->supportTiketManager->delete($supportTicket);
             $this->addFlash('success', 'Le ticket de support a été supprimé avec succès.');
         }

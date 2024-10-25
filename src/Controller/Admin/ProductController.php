@@ -19,10 +19,15 @@ class ProductController extends AbstractController
     public function __construct(private readonly ProductManager $productManagery) {}
 
     #[Route('', name: 'app_admin_product_index', methods: ['GET'])]
-    public function index(): Response
+    public function index(Request $request): Response
     {
+
+        $search = $request->query->get('q', null);
+
+        $products = $this->productManagery->findAll($search);
         return $this->render('admin/products/index.html.twig', [
-            'products' => $this->productManagery->findAll(),
+            'products' => $products,
+            'search' => $search,
         ]);
     }
 

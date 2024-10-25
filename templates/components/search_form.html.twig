@@ -1,7 +1,7 @@
 {% set action = action ?? '' %}
 {% set placeholder = placeholder ?? 'Rechercher....' %}
 
-<form action="{{ action }}">
+<form actionaction="{{ path('app_admin_product_index') }}" method="get">
     {% include 'components/search_field.html.twig' with {
         name: 'q',
         placeholder: placeholder,

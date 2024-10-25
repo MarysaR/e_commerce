@@ -30,10 +30,11 @@ class UserController extends AbstractController
 
 
         //On récupère ici un string, qui est le terme de la recherche dans les para
-        $searchTerm = $request->query->get('search', '');
+        $search = $request->query->get('q', '');
 
         return $this->render('admin/users/index.html.twig', [
-            'users' => $this->userManager->findAll($searchTerm),
+            'users' => $this->userManager->findAll($search),
+            'search' => $search,
         ]);
     }
 

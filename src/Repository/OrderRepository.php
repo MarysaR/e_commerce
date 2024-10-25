@@ -9,7 +9,7 @@ use Doctrine\Persistence\ManagerRegistry;
 
 class OrderRepository extends ServiceEntityRepository
 {
-	use HasCrudOperations;
+    use HasCrudOperations;
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Order::class);
@@ -55,19 +55,20 @@ class OrderRepository extends ServiceEntityRepository
             ->getResult();
     }
 
-	public function search(?string $search = null)
-	{
-		$qb = $this->createQueryBuilder('o')->join('o.user', 'u');
-		if ($search) {
-			$qb
-				->orWhere('u.firstName LIKE :search')
-				->orWhere('u.lastName LIKE :search')
-				->orWhere('o.status LIKE :search')
-				->orWhere('o.transactionId LIKE :search')
-				->setParameter('search', '%' . $search . '%')
-			;
-		}
-		
-		return $qb->getQuery()->getResult();
-	}
+    public function search(?string $search = null)
+    {
+        $qb = $this->createQueryBuilder('o')->join('o.user', 'u');
+        if ($search) {
+            $qb
+                ->orWhere('u.firstName LIKE :search')
+                ->orWhere('u.email LIKE :search')
+                ->orWhere('u.lastName LIKE :search')
+                ->orWhere('o.status LIKE :search')
+                ->orWhere('o.transactionId LIKE :search')
+                ->setParameter('search', '%' . $search . '%')
+            ;
+        }
+
+        return $qb->getQuery()->getResult();
+    }
 }

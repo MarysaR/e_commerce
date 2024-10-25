@@ -10,9 +10,12 @@
 
         {% block table_actions %}
             <div class="flex justify-end gap-2 items-center">
+                <form action="{{ path('app_admin_support_ticket_index') }}" method="get">
                 {% include 'components/search_form.html.twig' with {
                     placeholder: 'Rechercher un ticket...',
+                    value: search
                 } %}
+             </form>
             </div>
         {% endblock %}
         {% block table_header %}

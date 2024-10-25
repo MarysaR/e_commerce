@@ -9,9 +9,10 @@
         {% block table_title %}Liste des commandes{% endblock %}
         {% block table_actions %}
             <div class="flex justify-end">
-                <form action="">
+                <form action="{{ path('app_admin_order_index') }}" method="get">
                     {% include 'components/search_field.html.twig' with {
                         placeholder: 'Rechercher une commande...',
+                        value: search
                     } %}
                 </form>
             </div>
