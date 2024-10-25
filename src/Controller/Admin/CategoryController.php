@@ -11,6 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Doctrine\ORM\EntityManagerInterface;
+
 
 #[Route('/admin/categories')]
 class CategoryController extends AbstractController
@@ -61,6 +63,8 @@ class CategoryController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             // TODO: il faut appeler la bonne methode ici pour mettre à jour la catégorie
+            $this->categoryManager->update($category);
+
             $this->addFlash('success', 'La catégorie a été mise à jour avec succès.');
 
             return $this->redirectToRoute('app_admin_category_index', [], Response::HTTP_SEE_OTHER);
@@ -75,7 +79,7 @@ class CategoryController extends AbstractController
     #[Route('/{id}', name: 'app_admin_category_delete', methods: ['POST'])]
     public function delete(Request $request, Category $category): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$category->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $category->getId(), $request->request->get('_token'))) {
             $this->categoryManager->delete($category);
             $this->addFlash('success', 'La catégorie a été supprimée avec succès.');
         }

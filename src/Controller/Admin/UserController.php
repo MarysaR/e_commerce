@@ -22,10 +22,18 @@ class UserController extends AbstractController
     #[Route('', name: 'app_admin_user_index', methods: ['GET'])]
     public function index(Request $request): Response
     {
+        // return $this->render('admin/users/index.html.twig', [
+        //     'users' => $this->userManager->findAll(
+        // 		//TODO: Passez le bon argument pour faire la recherche
+        //     ),
+        // ]);
+
+
+        //On récupère ici un string, qui est le terme de la recherche dans les para
+        $searchTerm = $request->query->get('search', '');
+
         return $this->render('admin/users/index.html.twig', [
-            'users' => $this->userManager->findAll(
-				//TODO: Passez le bon argument pour faire la recherche
-            ),
+            'users' => $this->userManager->findAll($searchTerm),
         ]);
     }
 
@@ -83,7 +91,7 @@ class UserController extends AbstractController
     #[Route('/{id}', name: 'app_admin_user_delete', methods: ['POST'])]
     public function delete(Request $request, User $user): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $user->getId(), $request->request->get('_token'))) {
             $this->userManager->delete($user);
             $this->addFlash('success', 'L\'utilisateur a été supprimé avec succès.');
         }

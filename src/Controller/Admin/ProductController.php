@@ -6,6 +6,7 @@ use App\Entity\Product;
 use App\Form\ProductType;
 use App\Repository\ProductRepository;
 use App\Service\ProductManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -54,13 +55,16 @@ class ProductController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_admin_product_edit', methods: ['GET', 'POST'])]
-    public function edit(Request $request, Product $product): Response
+    public function edit(Request $request, Product $product, ProductManager $productManager): Response
     {
         $form = $this->createForm(ProductType::class, $product);
         // TODO: Ajouter la ligne qui permet d'analyser le formulaire
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             // TODO: Appeler la bonne méthode pour mettre à jour le produit
+            $this->productManagery->update($product);
+
             $this->addFlash('success', 'Le produit a été mis à jour avec succès.');
 
             return $this->redirectToRoute('app_admin_product_index', [], Response::HTTP_SEE_OTHER);
@@ -75,7 +79,7 @@ class ProductController extends AbstractController
     #[Route('/{id}', name: 'app_admin_product_delete', methods: ['POST'])]
     public function delete(Request $request, Product $product): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$product->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $product->getId(), $request->request->get('_token'))) {
             $this->productManagery->delete($product, true);
             $this->addFlash('success', 'Le produit a été supprimé avec succès.');
         }
